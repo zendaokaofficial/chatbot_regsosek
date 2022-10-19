@@ -4,6 +4,8 @@ const client = new Client();
 const { google } = require('googleapis');
 const keys = require("C:/Users/Zenda Oka B/bot-regsosek/regsosekbali-21e7a475c092.json");
 
+const state = {}
+
 client.on('qr', qr => {
     qrcode.generate(qr, {small: true});
 });
@@ -64,39 +66,35 @@ async function gsrun(cl){
     
     // membaca dari pesan
     client.on('message', msg => {
-        if (msg.body.includes("-")) {
-            
-            var idsls = msg.body.split("-")[0].replaceAll(' ','');
-    
-            // jika ada di database
-            if (idslss.includes(idsls)){
-
-                let index = idslss.indexOf(idsls);
-
-                text = "Apakah informasi yang anda masukkan berikut sudah benar? \n \nKecamatan: *" + kec[index] + "*\nDesa           : *" + des[index] + "*\nSLS             : *" + sls[index]
-                + "*\nID SLS         : *" + idsls + "*\n \n ";
-                msg.reply(text);
-
-                // balas konfirmasinya 
-
-                client.on('message', msg1 => {
-                    if (msg1.body.includes("ya")) {
-                        msg1.reply('Terima kasih atas laporannya');
-                    } else if (msg1.body.includes("tidak")) {
-                        msg1.reply('Silahkan laporkan lagi sesuai data');
-                    } else {
-                        msg1.reply('Format laporan salah, silahkan ulangi pelaporan dari awal');
-                    }
-                });
-
-            } else {
-                // tidak ada di database
-                msg.replay('id sls tidak ada di database. Mohon untuk cek kembali id sls');
-            }    
-            console.log(idsls);
+        if (state[msg.from] === "konfirmasi") {
+            ....
         } else {
-            msg.reply('Laporan salah, mohon untuk disesuaikan dengan format laporan');
+            if (msg.body.includes("-")) {
+
+                var idsls = msg.body.split("-")[0].replaceAll(' ','');
+
+                // jika ada di database
+                if (idslss.includes(idsls)){
+
+                    let index = idslss.indexOf(idsls);
+
+                    text = "Apakah informasi yang anda masukkan berikut sudah benar? \n \nKecamatan: *" + kec[index] + "*\nDesa           : *" + des[index] + "*\nSLS             : *" + sls[index]
+                    + "*\nID SLS         : *" + idsls + "*\n \n ";
+                    msg.reply(text);
+
+                    state[msg.from] = "konfirmasi"
+
+                } else {
+                    // tidak ada di database
+                    msg.replay('id sls tidak ada di database. Mohon untuk cek kembali id sls');
+                }    
+                console.log(idsls);
+            } else {
+                msg.reply('Laporan salah, mohon untuk disesuaikan dengan format laporan');
+            }
         }
+        
+        
     });
     //console.log(kec)
 }
