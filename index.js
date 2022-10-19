@@ -67,7 +67,13 @@ async function gsrun(cl){
     // membaca dari pesan
     client.on('message', msg => {
         if (state[msg.from] === "konfirmasi") {
-            ....
+            if (msg1.body.includes("ya")) {
+                        msg1.reply('Terima kasih atas laporannya');
+                    } else if (msg1.body.includes("tidak")) {
+                        msg1.reply('Silahkan laporkan lagi sesuai data');
+                    } else {
+                        msg1.reply('Format laporan salah, silahkan ulangi pelaporan dari awal');
+                    }
         } else {
             if (msg.body.includes("-")) {
 
